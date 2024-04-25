@@ -1,23 +1,27 @@
-import logo from './logo.svg';
+
+import { useEffect, useState } from 'react';
 import './App.css';
+import {Quote} from './quote';
+import axios from 'axios';
+import { Button } from './Button';
 
 function App() {
+  const [quote,setQuote] = useState({});
+
+  const fetchQuote = async () =>{
+      const response = await axios.get("https://type.fit/api/quotes");
+      setQuote(response.data[Math.floor(Math.random()*10)]);
+      
+  }
+  useEffect(() => {
+    fetchQuote();
+  },[] )
+  console.log(quote);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='text-center w-[600px] mx-auto mt-36 bg-gray-200 p-4 rounded   '>
+      <h1 className='font-bold text-3xl'>Random Quote Machine</h1>
+      <Quote quote={quote} />
+      <Button onClick = {fetchQuote} text="Generate Quote"/>
     </div>
   );
 }
